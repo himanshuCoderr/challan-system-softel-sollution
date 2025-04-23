@@ -1,10 +1,10 @@
 import axios from "axios";
 
-let baseUrl = "http://localhost:4000"
+let baseUrl = "https://apisalon.softelsolutions.in"
 
 async function login(userName , userPassword) {
 
-        let response = await axios.post(baseUrl + "/api/login", {
+        let response = await axios.post(baseUrl + "/api/Login/UserLogin", {
             "userName": userName,
             "password": userPassword
         },
