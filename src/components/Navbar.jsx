@@ -3,16 +3,18 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
   
   let [currentUserName, setCurrentUserName] = useState("")
-
+  const navigate = useNavigate()
   async function getName() {
     let userName = await localStorage.getItem("fullName")
-    if (userName.length > 0) {
+    if (userName?.length > 0) {
       setCurrentUserName(userName)
     } else {
       toast("Unable to fetch Name")
+      navigate("/login")
     }
   }
   console.log("Done 1")

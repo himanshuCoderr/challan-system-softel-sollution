@@ -1,13 +1,11 @@
 import React from 'react'
 import Navbar from '../../components/Navbar'
-
+import FillChallanForm from '../../components/FillChallanForm'
 const Home = () => {
   return (
     <div>
         <Navbar />
-        <div className="content">
-          <h1>Home</h1>
-        </div>
+        <FillChallanForm />
     </div>
   )
 }
