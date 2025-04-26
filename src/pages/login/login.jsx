@@ -1,107 +1,61 @@
 import React from 'react'
-import './login.css';
 import { useState } from 'react';
-import { login } from '../../services/user';
-import { useContext } from 'react';
-import { LoginContext } from '../../state/context/LoginContext';
-import { useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { toast } from 'react-toastify';
 
+export default function Login() {
 
-const Login = () => {
+    const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  });
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
 
-  const { loginStatus, setLoginStatus } = useContext(LoginContext)
+    
 
-  const navigate = useNavigate()
-
-  const [showPassword, setShowPassword] = useState(false)
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
-  async function handleSubmit(e) {
-
-
-
-
-    e.preventDefault()
-    console.log(formData)
-    let userData = await login(formData.username, formData.password)
-    console.log(userData.data)
-    if (userData.data.status === 1) {
-      toast("Logged In")
-
-      setLoginStatus(true)
-      
-      localStorage.setItem("fullName" , userData.data.data.fullName )
-      localStorage.setItem("userId" , userData.data.data.userId )
-      localStorage.setItem("token" , userData.data.data.token )
-
-      navigate('/')
-    }
-    else {
-      toast("Check Credentials !!")
-      setLoginStatus(false)
-    }
-  }
-  return (
-    <div className="login-container">
-      <div className="login-box">
-        <h1 className="login-title">Login</h1>
-        <form className="login-form" onSubmit={handleSubmit} >
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              onChange={(e) => {
-                handleChange(e)
-              }}
-              placeholder="Enter your username"
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <div className='password-container' style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between' }} >
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                onChange={handleChange}
-                placeholder="Enter your password"
-                required
-                maxLength={7}
-                minLength={4}
-                style={{ width: '85%' }}
-              />
-              {
-                showPassword ? <span onClick={() => {
-                  setShowPassword(false)
-                }}  > <VisibilityOffIcon /> </span> : <span onClick={() => {
-                  setShowPassword(true)
-                }}  > <VisibilityIcon /> </span>
-              }
-
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-gray-100">
+            <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+                <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+                <form className="space-y-4">
+                    <div className="mb-4 text-left">
+                        <label htmlFor="username" className="block text-gray-700 text-sm font-bold mb-2">
+                            Username:
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <div className="mb-6 text-left relative">
+                        <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">
+                            Password:
+                        </label>
+                        <input
+                            type={passwordVisible ? 'text' : 'password'}
+                            id="password"
+                            name="password"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                        <button
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            className="absolute inset-y-0 right-0 pr-3 pt-5 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+                            title={passwordVisible ? 'Hide Password' : 'Show Password'}
+                        >
+                            {passwordVisible ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        </button>
+                    </div>
+                    <button
+                        type="submit"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+                    >
+                        Login
+                    </button>
+                </form>
             </div>
-
-          </div>
-          <button type="submit" className="login-button"  >
-            Login
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-export default Login;
+        </div>
+    )
+}
