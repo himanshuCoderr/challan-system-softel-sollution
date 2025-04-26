@@ -5,6 +5,7 @@ import Login from './pages/login/login';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { Bounce } from 'react-toastify';
+import Challans from './pages/Challans/Challans';
 
 const routes = createBrowserRouter(
   [
@@ -15,6 +16,10 @@ const routes = createBrowserRouter(
     {
       path: "/login",
       element: <Login />
+    },
+    {
+      path : '/Challans',
+      element : <Challans />
     }
   ]
 )
