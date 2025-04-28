@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { getChallansCategory } from '../services/Challan';
 import { getChallansResons } from '../services/Challan';
+import { addChallan } from '../services/Challan';
 const FillChallanForm = () => {
   let [challansCategory, setChallansCategory] = useState([])
   let [challanResons, setChallanReasons] = useState([])
@@ -17,6 +18,27 @@ const FillChallanForm = () => {
     imagePath: ""
   })
 
+  function handleChange(e) {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    let res = await addChallan(formData)
+    if (res.status == 1) {
+      alert(res.message)
+      setFormData({
+        vehicleToeEntryId: 0,
+        vehicleCategoryId: "",
+        vehicleNo: "",
+        challanReasonId: "",
+        amount: "",
+      })
+    } else {
+      alert(res.message)
+    }
+  }
 
   async function getData() {
     let categoryData = await getChallansCategory()
@@ -36,7 +58,7 @@ const FillChallanForm = () => {
       <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Fill Challan Details</h2>
         {console.log(challansCategory)}
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {/* Vehicle Toe Entry ID */}
             <div>
@@ -58,10 +80,17 @@ const FillChallanForm = () => {
               <label htmlFor="vehicleCategoryId" className="block text-sm font-medium text-gray-700">
                 Vehicle Category ID
               </label>
-              <select name="" id="">
+              <select 
+                name="vehicleCategoryId" 
+                id="vehicleCategoryId" 
+                onChange={handleChange} 
+                value={formData.vehicleCategoryId}
+                required
+              > 
+                <option value="">Select Category</option>
                 {
                   challansCategory.map((cat) => {
-                    return <option>{cat.vehicleCategory}</option>
+                    return <option key={cat.vehicleCategoryId} value={cat.vehicleCategoryId}>{cat.vehicleCategory}</option>
                   })
                 }
               </select>
@@ -76,6 +105,9 @@ const FillChallanForm = () => {
                 type="text"
                 id="vehicleNo"
                 name="vehicleNo"
+                onChange={handleChange}
+                required
+                value={formData.vehicleNo}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
@@ -85,10 +117,17 @@ const FillChallanForm = () => {
               <label htmlFor="challanReasonId" className="block text-sm font-medium text-gray-700">
                 Challan Reason ID
               </label>
-              <select name="" id="">
+              <select 
+                name="challanReasonId" 
+                id="challanReasonId" 
+                onChange={handleChange}
+                value={formData.challanReasonId}
+                required
+              >
+                <option value="">Select Reason</option>
                 {
                   challanResons.map((rea) => {
-                    return <option>{rea.challanReason}</option>
+                    return <option key={rea.challanReasonId} value={rea.challanReasonId}>{rea.challanReason}</option>
                   })
                 }
               </select>
@@ -103,6 +142,9 @@ const FillChallanForm = () => {
                 type="number"
                 id="amount"
                 name="amount"
+                required
+                onChange={handleChange}
+                value={formData.amount}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
